@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Patient List</title>
+  <link rel="stylesheet" type="text/css" href="../static/css/search.css" th:href="@{/css/search.css}">
+</head>
+<body>
+
+<div>
+  <h1 id="main-title" th:text="'Wyniki dla: ' + ${query}" />
+
+</div>
+
+<div>
+  <form id="back" action="http://localhost:8080">
+    <input type="submit" value="Wstecz" />
+  </form>
+</div>
+
+<div id="info">
+  <p id="count-patients" th:text="'Znaleziono ' + ${result.size()} + ' pacjentów'" />
+</div>
+
+
+<table id="patient-list">
+  <tr id="table-header">
+    <td>No.</td>
+    <td>Name</td>
+  </tr>
+  <tr th:each="data, iter: ${result}">
+    <td id="number" th:text="${iter.index+1}" th:id="|td${iter.index}|"></td>
+    <td id="name"><a th:href="'/patient=' + ${data[2]}" th:text="${data[0]} + ' ' + ${data[1]}"/></td>
+  </tr>
+</table>
+</body>
+</html>

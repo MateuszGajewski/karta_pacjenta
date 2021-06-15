@@ -1,0 +1,146 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:form="http://www.w3.org/1999/xhtml">
+<head>
+    <link rel="stylesheet" type="text/css" href="../static/css/search.css" th:href="@{/css/search.css}">
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <script>
+        function tableFilter() {
+
+
+            var sel= document.getElementById( "filter_date" );
+            var year = parseInt(yourSelect.options[ sel.selectedIndex ].value);
+
+
+            var input, filter, table, tr, td, i;
+
+
+            var ts = Date.now() - year * 12 * 30 * 24 * 3600 * 1000;
+
+            table = document.getElementById("observations-timeline");
+            tr = table.getElementsByTagName("tr");
+
+
+            for (i = 1; i < tr.length; i++) {
+                td = tr[i].getElementsByTagName("td")[0];
+                if (td) {
+                    tr_ts = Date.parse(td.innerHTML);
+                    if (tr_ts > ts) {
+                        tr[i].style.display = "";
+                    } else {
+                        tr[i].style.display = "none";
+                    }
+                }
+            }
+
+            table = document.getElementById("rekordy");
+            tr = table.getElementsByTagName("tr");
+
+            // Loop through all table rows, and hide those who don't match the search query
+            for (i = 1; i < tr.length; i++) {
+                td = tr[i].getElementsByTagName("td")[0];
+                if (td) {
+                    tr_ts = Date.parse(td.innerHTML);
+                    if (tr_ts > ts) {
+                        tr[i].style.display = "";
+                    } else {
+                        tr[i].style.display = "none";
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body>
+<div>
+    <h1 id="patient-name" th:text="${patient.getNameFirstRep().getNameAsSingleString()}" />
+
+    <form id="back" action="http://localhost:8080">
+        <input type="submit" value="Back To List" />
+    </form>
+</div>
+
+
+
+<table id="patient-data">
+    <tr>
+        <td>First Name</td>
+        <td th:text="${patient.getNameFirstRep().getGiven()}"></td>
+    </tr>
+    <tr>
+        <td>Last Name</td>
+        <td th:text="${patient.getNameFirstRep().getFamily()}"></td>
+    </tr>
+    <tr>
+        <td>Gender</td>
+        <td th:text="${patient.getGender().getDisplay()}"></td>
+    </tr>
+    <tr>
+        <td>Birth Date</td>
+        <td th:text="${patient.getBirthDateElement().toHumanDisplay()}"></td>
+    </tr>
+    <tr th:if="${patient.hasDeceased()}">
+        <td>Death Date</td>
+        <td th:text="${patient.getDeceasedDateTimeType().toHumanDisplay()}"></td>
+    </tr>
+    <tr>
+        <td>Address</td>
+        <td th:text="${patient.getAddressFirstRep().getPostalCode()} + ' ' + ${patient.getAddressFirstRep().getCity()} + ', ' + ${patient.getAddressFirstRep().getCountry()} "></td>
+    </tr>
+    <tr>
+        <td>Marital Status</td>
+        <td th:text="${patient.getMaritalStatus().getText()}"></td>
+    </tr>
+</table>
+
+<br/>
+<br/>
+<div class="row">
+    <select class="form-control" style="width: 300px;" id="filter_date">
+        <option value="40">All</option>
+        <option value="10">Last 10 years</option>
+        <option value="5">Last 5 years</option>
+        <option value="3">Last 3 years</option>
+        <option value="2">Last 2 years</option>
+        <option value="1">Last 1 years </option>
+    </select>
+    &nbsp;
+    <button type="button" class="btn btn-info" onclick="tableFilter(3);">Filter data</button>
+</div>
+
+
+<div id="patient-observations">
+    <h2>Observations</h2>
+    <table id="observations-timeline">
+        <tr id="table-header">
+            <td>Date</td>
+            <td>Observation</td>
+            <td>Value</td>
+        </tr>
+        <tr th:each="data, iterstat: ${observations}">
+            <td th:text="${data[1]}" th:id="|td${iterstat.index}|"></td>
+            <td><a th:text="${data[0]}"></td>
+            <td th:text="${data[2]}+ ' ' + ${data[3]}"></td>
+        </tr>
+    </table>
+</div>
+
+
+<div id="rek_pac">
+    <h2>Medications</h2>
+    <table id="rekordy">
+        <tr id="table-header">
+            <td>Date</td>
+            <td>Prescription</td>
+            <td>Medication</td>
+        </tr>
+        <tr th:each="med, iter: ${medications}">
+            <td th:text="${med[0]}" th:id="|td${iter.index}|"></td>
+            <td th:text="${med[1]}" th:id="|td${iter.index}|"></td>
+            <td th:text="${med[2]}" th:id="|td${iter.index}|"></td>
+        </tr>
+    </table>
+</div>
+<br/><br/><br/><br/>
+</body>
+</html>

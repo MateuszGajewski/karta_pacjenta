@@ -1,0 +1,45 @@
+#main-title {
+    font-size: 50px;
+    display: inline-block;
+    color: #484848;
+    text-align: center;
+    vertical-align: middle;
+    padding-left: 20px;
+    margin-top: 15px;
+}
+
+#count-patients{
+    background-color: beige;
+    color: #484848;
+}
+
+table {
+    margin-left: 10px;
+    border-collapse: collapse;
+    width: 50%;
+}
+
+#table-header{
+    height: 50px;
+    background-color: #484848;
+    color: white;
+    font-weight: bolder;
+    text-align: center;
+}
+
+tr {
+    height: 30px;
+}
+
+table, tr, td {
+    border: 1px solid black;
+}
+
+a {
+    color: black;
+    text-decoration: none;
+}
+
+a:visited {
+    color: darkblue;
+}
